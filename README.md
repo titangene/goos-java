@@ -19,3 +19,7 @@
 
 - **IntelliJ**：`.idea/libraries/lib.xml` 的 library 用兩個 `jarDirectory` 分別指向 `lib/deploy`、`lib/develop`，新增/移除 jar 後重新整理 IDE 即可自動反映。
 - **VS Code**：裝 Java extension 後，`.vscode/settings.json` 裡的 `java.project.referencedLibraries` 設成包含 `lib/deploy/*.jar`、`lib/develop/*.jar`，並排除 `-src.jar`/`-sources.jar`；這個設定檔會被 git 追蹤，team 每個人開箱即用。
+
+## Docker 環境
+
+Java 的編譯/執行/測試都跑在 Docker 裡，Openfire（XMPP）測試環境也是，細節見 [docker/README.md](docker/README.md)。
