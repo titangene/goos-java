@@ -6,7 +6,11 @@
 
 本專案的 Java（編譯、執行、測試）一律透過 `docker/docker-compose.yml` 定義的 `toolbox` container 執行，不在 host 直接跑 `javac`/`java`。
 
-跑 end-to-end 測試：`docker/scripts/test.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-e2e-tests.sh`）。
+跑全部測試（先 unit 再 end-to-end）：`docker/scripts/test.sh`。
+
+跑 unit 測試：`docker/scripts/test-unit-tests.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-unit-tests.sh`；不需要 Openfire，但 `toolbox` 的 `network_mode: service:openfire` 設定仍會連帶啟動 `openfire` container）。
+
+跑 end-to-end 測試：`docker/scripts/test-e2e-tests.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-e2e-tests.sh`）。
 
 跑 Swing app（視窗顯示在主機的 X display 上）：`docker/scripts/run-app.sh`。
 
