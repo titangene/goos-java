@@ -52,9 +52,9 @@ public class Main {
                         });
                     }
                 });
-        this.notToBeGCd = chat;
 
-        chat.sendMessage(new Message());
+        this.notToBeGCd = chat;
+        chat.sendMessage(JOIN_COMMAND_FORMAT);
     }
 
     private static XMPPConnection

@@ -1,6 +1,5 @@
 package test.endtoend.auctionsniper;
 
-import auctionsniper.ui.MainWindow;
 import org.junit.After;
 import org.junit.Test;
 
