@@ -5,6 +5,8 @@ services:
     ports:
       - "9090:9090"   # admin console（跑 setup wizard 用）
       - "5222:5222"   # 測試會用到的 XMPP client port
+      - "7070:7070"   # unencrypted BOSH / WebSocket（ws://.../ws/）
+      - "7443:7443"   # encrypted BOSH / WebSocket（wss://.../ws/）
     volumes:
       - openfire-data:/var/lib/openfire
 
