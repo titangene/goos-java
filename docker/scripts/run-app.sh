@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 
 xhost +local:docker > /dev/null 2>&1 || true
 
-sudo docker compose up -d --build toolbox
+sudo docker compose up -d --build --no-deps toolbox
 sudo docker compose exec -e DISPLAY="$DISPLAY" toolbox bash -c '
   set -euo pipefail
   PROJ=/app
