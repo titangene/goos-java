@@ -12,7 +12,7 @@
 
 跑 end-to-end 測試：`docker/scripts/test-e2e-tests.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-e2e-tests.sh`）。
 
-跑 Swing app（視窗顯示在主機的 X display 上）：`docker/scripts/run-app.sh`。
+跑 Swing app（視窗顯示在主機的 X display 上）：`docker/scripts/run-app.sh <itemId> [username] [password]`。
 
 ## Openfire（XMPP）
 

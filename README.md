@@ -23,3 +23,5 @@
 ## Docker 環境
 
 Java 的編譯/執行/測試都跑在 Docker 裡，Openfire（XMPP）測試環境也是，細節見 [docker/README.md](docker/README.md)。
+
+用 `docker/tools/FakeAuction.java` 這個互動式假拍賣工具模擬賣家，見 [docs/fake-auction.md](docs/fake-auction.md)。
