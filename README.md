@@ -10,3 +10,10 @@
 - `lib/develop`：只有開發/測試會用到的依賴（junit、hamcrest、jmock、windowlicker...），不會進到實際跑起來的 app
 
 編譯 app 只用 `lib/deploy` 的 classpath；編譯/跑測試則是 `lib/deploy` + `lib/develop` 一起用（`lib/develop` 裡的 `-src.jar` 是原始碼、不放進 classpath）。
+
+## IDE 設定
+
+兩個 IDE 都設定成指向 `lib/deploy`、`lib/develop` 這兩個資料夾層級，新增/移除 jar 不用手動改設定檔：
+
+- **IntelliJ**：`.idea/libraries/lib.xml` 的 library 用兩個 `jarDirectory` 分別指向 `lib/deploy`、`lib/develop`，新增/移除 jar 後重新整理 IDE 即可自動反映。
+- **VS Code**：裝 Java extension 後，`.vscode/settings.json` 裡的 `java.project.referencedLibraries` 設成包含 `lib/deploy/*.jar`、`lib/develop/*.jar`，並排除 `-src.jar`/`-sources.jar`；這個設定檔會被 git 追蹤，team 每個人開箱即用。
