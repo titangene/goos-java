@@ -6,6 +6,10 @@
 
 本專案的 Java（編譯、執行、測試）一律透過 `docker/docker-compose.yml` 定義的 `toolbox` container 執行，不在 host 直接跑 `javac`/`java`。
 
+## 依賴套件：vendor jar
+
+依賴的 jar 放在 `lib/`，不用 Maven/Gradle 等建置工具管理版本，直接 commit 進 git。新增依賴時：runtime 需要的放 `lib/deploy`，只有開發/測試用的放 `lib/develop`（新 jar 丟進去，兩個 IDE 都會自動抓到，不用改設定檔）。編譯 app 只用 `lib/deploy`；編譯/跑測試是 `lib/deploy` + `lib/develop`（`-src.jar` 要排除）。完整說明見 [README.md](README.md)。
+
 ## TDD commit message 格式
 
 照書中章節逐步開發，commit message 用 Conventional Commits。依 commit 的性質選格式：
