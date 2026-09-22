@@ -8,6 +8,7 @@ set -euo pipefail
 PROJ=/app
 BUILD=$PROJ/build-docker
 
+APP_CP=$(ls "$PROJ"/lib/deploy/*.jar | tr '\n' ':')
 DEV_CP=$(ls "$PROJ"/lib/develop/*.jar | grep -v -- '-src.jar' | tr '\n' ':')
 
 compile() {
@@ -18,17 +19,16 @@ compile() {
 }
 
 echo "== compiling app =="
-# app 目前沒有外部依賴，classpath 先指向自己的輸出目錄
-compile "$PROJ/src" "$BUILD/app" "$BUILD/app"
+compile "$PROJ/src" "$BUILD/app" "$APP_CP"
 
 echo "== compiling end-to-end tests =="
-compile "$PROJ/test/end-to-end" "$BUILD/e2e-test" "$BUILD/app:$DEV_CP"
+compile "$PROJ/test/end-to-end" "$BUILD/e2e-test" "$BUILD/app:$APP_CP$DEV_CP"
 
 echo "== running end-to-end tests =="
 classes=$(cd "$BUILD/e2e-test" && find . -name '*.class' ! -name '*\$*' | sed 's|^\./||; s|\.class$||; s|/|.|g' | grep -E 'Test$')
 
 if [[ "${1:-}" == "--headed" ]]; then
-  java -cp "$BUILD/e2e-test:$BUILD/app:$DEV_CP" org.junit.runner.JUnitCore $classes
+  java -cp "$BUILD/e2e-test:$BUILD/app:$APP_CP$DEV_CP" org.junit.runner.JUnitCore $classes
 else
-  xvfb-run -a java -cp "$BUILD/e2e-test:$BUILD/app:$DEV_CP" org.junit.runner.JUnitCore $classes
+  xvfb-run -a java -cp "$BUILD/e2e-test:$BUILD/app:$APP_CP$DEV_CP" org.junit.runner.JUnitCore $classes
 fi
