@@ -23,6 +23,7 @@ public class FakeAuctionServer {
     private final SingleMessageListener messageListener = new SingleMessageListener();
     private final String itemId;
     private final XMPPConnection connection;
+    private Chat currentChat;
 
     public FakeAuctionServer(String itemId) {
         this.itemId = itemId;
@@ -42,6 +43,7 @@ public class FakeAuctionServer {
         );
         connection.getChatManager().addChatListener(new ChatManagerListener() {
             public void chatCreated(Chat chat, boolean createdLocally) {
+                currentChat = chat;
                 chat.addMessageListener(messageListener);
             }
         });
@@ -51,7 +53,9 @@ public class FakeAuctionServer {
         messageListener.receivesAMessage();
     }
 
-    public void announceClosed() {}
+    public void announceClosed() throws XMPPException {
+        currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
+    }
 
     public void stop() {
         connection.disconnect();

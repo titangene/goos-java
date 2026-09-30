@@ -19,6 +19,11 @@ public class Main {
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
     public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
+    private MainWindow ui;
+
+    @SuppressWarnings("unused")
+    private Chat notToBeGCd;
+
     public Main() throws Exception {
         startUserInterface();
     }
@@ -36,10 +41,15 @@ public class Main {
             auctionId(itemId, connection),
             new MessageListener() {
                 public void processMessage(Chat aChat, Message message) {
-                    // nothing yet
+                    SwingUtilities.invokeLater(new Runnable() {
+                        public void run() {
+                            ui.showStatus(MainWindow.STATUS_LOST);
+                        }
+                    });
                 }
             }
         );
+        this.notToBeGCd = chat;
         chat.sendMessage(new Message());
     }
 
@@ -57,7 +67,7 @@ public class Main {
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                MainWindow ui = new MainWindow();
+                ui = new MainWindow();
             }
         });
     }
