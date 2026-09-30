@@ -3,7 +3,12 @@ package test.endtoend.auctionsniper;
 import auctionsniper.Main;
 import auctionsniper.ui.MainWindow;
 
+import static test.endtoend.auctionsniper.FakeAuctionServer.XMPP_HOSTNAME;
+
 public class ApplicationRunner {
+    public static final String SNIPER_ID = "sniper";
+    public static final String SNIPER_PASSWORD = "sniper";
+
     private AuctionSniperDriver driver;
 
     public void startBiddingIn(final FakeAuctionServer auction) {
@@ -11,7 +16,7 @@ public class ApplicationRunner {
             @Override
             public void run() {
                 try {
-                    Main.main();
+                    Main.main(XMPP_HOSTNAME, SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
