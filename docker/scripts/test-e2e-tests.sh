@@ -2,11 +2,13 @@
 # Runs the end-to-end tests inside the toolbox container.
 # 加上 --headed 參數可以讓測試執行時的 Swing UI 顯示在主機螢幕上（預設是
 # xvfb 虛擬 display，看不到畫面），方便除錯。
+# --no-deps 讓這裡不會因為 docker-compose.yml 的 openfire 區塊有變動就重建
+# openfire container（會清掉已經建好的測試帳號）。
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-docker compose up -d --build toolbox
+docker compose up -d --build --no-deps toolbox
 
 if [[ "${1:-}" == "--headed" ]]; then
   xhost +local:docker > /dev/null 2>&1 || true
