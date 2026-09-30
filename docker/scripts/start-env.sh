@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# 啟動 openfire + toolbox container，讓環境準備好可以跑 scripts/test.sh。
+# 啟動 openfire + toolbox container，跑 Playwright 腳本把 Openfire 的
+# setup wizard 跑完並建立測試帳號，讓環境準備好可以直接跑 scripts/test.sh。
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -17,4 +18,13 @@ echo "== building/starting toolbox =="
 docker compose build toolbox
 docker compose up -d toolbox
 
-echo "== environment ready =="
+if [ ! -d node_modules ]; then
+  echo "== installing playwright (first run) =="
+  npm install
+fi
+npx playwright install chromium
+
+echo "== running Openfire setup wizard + test accounts =="
+node setup-openfire.js
+
+echo "== environment ready. run docker/scripts/test.sh to execute the tests =="

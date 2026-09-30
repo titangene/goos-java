@@ -2,3 +2,5 @@ build-docker/
 .idea/
 .DS_Store
 *.class
+docker/node_modules/
+docker/setup-openfire-error.png
