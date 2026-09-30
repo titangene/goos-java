@@ -24,6 +24,12 @@ compile "$PROJ/src" "$BUILD/app" "$APP_CP"
 echo "== compiling end-to-end tests =="
 compile "$PROJ/test/end-to-end" "$BUILD/e2e-test" "$BUILD/app:$APP_CP$DEV_CP"
 
+echo "== waiting for Openfire (localhost:9090) =="
+for i in $(seq 1 30); do
+  curl -sf http://localhost:9090 > /dev/null && break
+  sleep 1
+done
+
 echo "== running end-to-end tests =="
 classes=$(cd "$BUILD/e2e-test" && find . -name '*.class' ! -name '*\$*' | sed 's|^\./||; s|\.class$||; s|/|.|g' | grep -E 'Test$')
 
