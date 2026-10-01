@@ -56,8 +56,13 @@ public class FakeAuctionServer {
 
     public void hasReceivedBid(int bid, String sniperId) {}
 
-    public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        messageListener.receivesAMessage(equalTo(Main.JOIN_COMMAND_FORMAT));
+    public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
+    }
+
+    private void receivesAMessageMatching(String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException {
+        messageListener.receivesAMessage(messageMatcher);
+        assertThat(currentChat.getParticipant(), equalTo(sniperId));
     }
 
     public void announceClosed() throws XMPPException {
