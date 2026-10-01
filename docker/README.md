@@ -30,7 +30,13 @@ Openfire 第一次啟動要跑過 setup wizard、建立測試帳號才能用，�
 docker/scripts/start-env.sh
 ```
 
-會依序：啟動 openfire → 等 9090 有回應 → build/啟動 toolbox → 裝 Playwright（`docker/` 目錄下的 `npm install`）→ 跑 `setup-openfire.js` 建帳號。之後就能直接跑 `docker/scripts/test.sh`。
+會依序：
+1. 啟動 openfire，等 9090 有回應
+2. build/啟動 toolbox
+3. 安裝 Playwright（在 `docker/` 目錄執行 `npm install`）
+4. 跑 `setup-openfire.js` 建立帳號，並把 resource conflict policy 設成 `Never kick`（同一組帳號 + resource 重複登入時拒絕新的登入，回 `conflict(409)`，對應 GOOS ch12 的情境；Openfire 預設是 `Always kick`）
+
+之後就能直接跑 `docker/scripts/test.sh`。
 
 ### 停止環境
 
