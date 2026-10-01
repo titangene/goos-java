@@ -49,6 +49,10 @@ public class FakeAuctionServer {
         });
     }
 
+    public void reportPrice(int price, int increment, String bidder) {}
+
+    public void hasReceivedBid(int bid, String sniperId) {}
+
     public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
         messageListener.receivesAMessage();
     }

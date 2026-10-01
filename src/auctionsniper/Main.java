@@ -9,6 +9,9 @@ import org.jivesoftware.smack.packet.Message;
 
 import javax.swing.SwingUtilities;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class Main {
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
@@ -37,6 +40,8 @@ public class Main {
     }
 
     private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+        disconnectWhenUICloses(connection);
+
         Chat chat = connection.getChatManager().createChat(
             auctionId(itemId, connection),
             new MessageListener() {
@@ -68,6 +73,15 @@ public class Main {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 ui = new MainWindow();
+            }
+        });
+    }
+
+    private void disconnectWhenUICloses(final XMPPConnection connection) {
+        ui.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                connection.disconnect();
             }
         });
     }
