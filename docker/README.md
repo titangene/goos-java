@@ -10,6 +10,7 @@ Java 的編譯、執行、測試一律透過 `docker-compose.yml` 定義的 `too
 | `scripts/test-unit-tests.sh` | 編譯並執行 unit 測試（不用 XMPP server，也沒有 Swing UI，不需要 `xvfb-run`） |
 | `scripts/test-e2e-tests.sh` | 編譯並執行 E2E 測試（`test-e2e-tests.sh --headed` 會讓測試執行時的 Swing UI 顯示在主機螢幕上，方便除錯；預設不加參數是用 `xvfb-run` 虛擬 display，畫面不會顯示出來） |
 | `scripts/run-app.sh <itemId> [username] [password]` | 編譯並執行 Auction Sniper 這個 Swing app，視窗顯示在主機的 X display 上 |
+| `scripts/fake-auction.sh <itemId>` | 編譯並執行 `tools/FakeAuction.java`，用假拍賣工具手動扮演賣家，驅動 `run-app.sh` 開起來的 app（用法見 [docs/fake-auction.md](../docs/fake-auction.md)） |
 
 ## Openfire（XMPP）
 
