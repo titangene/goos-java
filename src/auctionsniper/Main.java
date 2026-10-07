@@ -46,7 +46,7 @@ public class Main implements SniperListener {
 
         Chat chat = connection.getChatManager().createChat(
                 auctionId(itemId, connection),
-                new AuctionMessageTranslator(new AuctionSniper(this))
+                new AuctionMessageTranslator(new AuctionSniper(null, this))
         );
 
         this.notToBeGCd = chat;
@@ -92,4 +92,7 @@ public class Main implements SniperListener {
             }
         });
     }
+
+    @Override
+    public void sniperBidding() {}
 }
