@@ -6,11 +6,11 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-sudo docker compose up -d --build --no-deps toolbox
+docker compose up -d --build --no-deps toolbox
 
 if [[ "${1:-}" == "--headed" ]]; then
   xhost +local:docker > /dev/null 2>&1 || true
-  sudo docker compose exec -e DISPLAY="$DISPLAY" toolbox bash /app/docker/scripts/run-e2e-tests.sh --headed
+  docker compose exec -e DISPLAY="$DISPLAY" toolbox bash /app/docker/scripts/run-e2e-tests.sh --headed
 else
-  sudo docker compose exec toolbox bash /app/docker/scripts/run-e2e-tests.sh
+  docker compose exec toolbox bash /app/docker/scripts/run-e2e-tests.sh
 fi
