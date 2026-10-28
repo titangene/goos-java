@@ -25,5 +25,5 @@ docker compose exec toolbox bash -c '
   echo "== running end-to-end tests =="
   classes=$(cd "$BUILD/e2e-test" && find . -name "*.class" ! -name "*\$*" | sed "s|^\./||; s|\.class$||; s|/|.|g" | grep -E "Test$")
 
-  java -cp "$BUILD/e2e-test:$DEV_CP" org.junit.runner.JUnitCore $classes
+  xvfb-run -a java -cp "$BUILD/e2e-test:$DEV_CP" org.junit.runner.JUnitCore $classes
 '
