@@ -1,9 +1,28 @@
 services:
+  openfire:
+    image: ghcr.io/igniterealtime/openfire:latest
+    hostname: localhost
+    # 不指定 host port，由 Docker 分配，避免多個 Compose 專案搶同一個 port。
+    # toolbox 共用 openfire 的 network namespace，不受影響，仍用原本的 port。
+    # 要從 host 連線時，用 docker compose ps 查實際分配到的 port。
+    ports:
+      - "9090"   # admin console（跑 setup wizard 用）
+      - "5222"   # 測試會用到的 XMPP client port
+    volumes:
+      - openfire-data:/var/lib/openfire
+
+  # 用 network_mode: service:openfire，讓這個 container 裡的 "localhost" 直接
+  # 打到 openfire -- 測試/production code 寫死 XMPP_HOSTNAME = "localhost"，
+  # 這樣就不用改 source code。
   toolbox:
     build:
       context: .
       dockerfile: toolbox.Dockerfile
+    network_mode: "service:openfire"
     volumes:
       - .:/app
     working_dir: /app
     command: ["sleep", "infinity"]
+
+volumes:
+  openfire-data:
