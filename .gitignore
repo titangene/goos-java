@@ -1,1 +1,3 @@
 build-docker/
+node_modules/
+scripts/setup-openfire-error.png
