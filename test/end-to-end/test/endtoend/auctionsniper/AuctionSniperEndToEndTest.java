@@ -1,5 +1,6 @@
 package test.endtoend.auctionsniper;
 
+import org.junit.After;
 import org.junit.Test;
 
 public class AuctionSniperEndToEndTest {
@@ -13,5 +14,15 @@ public class AuctionSniperEndToEndTest {
         auction.hasReceivedJoinRequestFromSniper();
         auction.announceClosed();
         application.showsSniperHasLostAuction();
+    }
+
+    @After
+    public void stopAuction() {
+        auction.stop();
+    }
+
+    @After
+    public void stopApplication() {
+        application.stop();
     }
 }
