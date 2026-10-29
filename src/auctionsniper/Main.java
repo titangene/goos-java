@@ -44,7 +44,7 @@ public class Main {
                     public void processMessage(Chat aChat, Message message) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                ui.showStatus("Lost");
+                                ui.showStatus(MainWindow.STATUS_LOST);
                             }
                         });
                     }
