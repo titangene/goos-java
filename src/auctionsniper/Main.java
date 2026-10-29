@@ -1,8 +1,8 @@
 package auctionsniper;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+
+import auctionsniper.ui.MainWindow;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
@@ -21,7 +21,7 @@ public class Main {
     public static final String AUCTION_ID_FORMAT =
             ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    private JLabel sniperStatus;
+    private MainWindow ui;
 
     @SuppressWarnings("unused")
     private Chat notToBeGCd;
@@ -44,7 +44,7 @@ public class Main {
                     public void processMessage(Chat aChat, Message message) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                sniperStatus.setText("Lost");
+                                ui.showStatus("Lost");
                             }
                         });
                     }
@@ -70,14 +70,7 @@ public class Main {
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
-                sniperStatus = new JLabel("Joining");
-                sniperStatus.setName("sniper status");
-
-                JFrame frame = new JFrame("Auction Sniper");
-                frame.setName("Auction Sniper Main");
-                frame.add(sniperStatus);
-                frame.pack();
-                frame.setVisible(true);
+                ui = new MainWindow();
             }
         });
     }
