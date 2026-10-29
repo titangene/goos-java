@@ -27,18 +27,7 @@ public class Main {
     private static Chat notToBeGCd;
 
     public static void main(String... args) throws Exception {
-        SwingUtilities.invokeAndWait(new Runnable() {
-            public void run() {
-                sniperStatus = new JLabel("Joining");
-                sniperStatus.setName("sniper status");
-
-                JFrame frame = new JFrame("Auction Sniper");
-                frame.setName("Auction Sniper Main");
-                frame.add(sniperStatus);
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
+        startUserInterface();
 
         XMPPConnection connection =
                 connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
@@ -70,5 +59,20 @@ public class Main {
     private static String auctionId(String itemId, XMPPConnection connection) {
         return String.format(AUCTION_ID_FORMAT, itemId,
                 connection.getServiceName());
+    }
+
+    private static void startUserInterface() throws Exception {
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run() {
+                sniperStatus = new JLabel("Joining");
+                sniperStatus.setName("sniper status");
+
+                JFrame frame = new JFrame("Auction Sniper");
+                frame.setName("Auction Sniper Main");
+                frame.add(sniperStatus);
+                frame.pack();
+                frame.setVisible(true);
+            }
+        });
     }
 }
