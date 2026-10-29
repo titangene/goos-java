@@ -9,15 +9,20 @@ public class MainWindow extends JFrame {
     public static final String STATUS_JOINING = "Joining";
     public static final String STATUS_LOST = "Lost";
 
-    private final JLabel sniperStatus = new JLabel(STATUS_JOINING);
+    private final JLabel sniperStatus = createLabel(STATUS_JOINING);
 
     public MainWindow() {
         super("Auction Sniper");
         setName(MAIN_WINDOW_NAME);
-        sniperStatus.setName(SNIPER_STATUS_NAME);
         add(sniperStatus);
         pack();
         setVisible(true);
+    }
+
+    private static JLabel createLabel(String initialText) {
+        JLabel result = new JLabel(initialText);
+        result.setName(SNIPER_STATUS_NAME);
+        return result;
     }
 
     public void showStatus(String status) {
