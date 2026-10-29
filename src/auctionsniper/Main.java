@@ -7,6 +7,7 @@ import javax.swing.SwingUtilities;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
 public class Main {
@@ -34,9 +35,8 @@ public class Main {
             }
         });
 
-        XMPPConnection connection = new XMPPConnection(args[ARG_HOSTNAME]);
-        connection.connect();
-        connection.login(args[ARG_USERNAME], args[ARG_PASSWORD], "Auction");
+        XMPPConnection connection =
+                connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
 
         Chat chat = connection.getChatManager().createChat(
                 "auction-" + args[ARG_ITEM_ID] + "@" + connection.getServiceName() + "/Auction",
@@ -51,5 +51,14 @@ public class Main {
                 });
         notToBeGCd = chat;
         chat.sendMessage(new Message());
+    }
+
+    private static XMPPConnection
+    connection(String hostname, String username, String password)
+            throws XMPPException {
+        XMPPConnection connection = new XMPPConnection(hostname);
+        connection.connect();
+        connection.login(username, password, "Auction");
+        return connection;
     }
 }
