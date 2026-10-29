@@ -10,6 +10,11 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.packet.Message;
 
 public class Main {
+    private static final int ARG_HOSTNAME = 0;
+    private static final int ARG_USERNAME = 1;
+    private static final int ARG_PASSWORD = 2;
+    private static final int ARG_ITEM_ID = 3;
+
     private static JLabel sniperStatus;
 
     @SuppressWarnings("unused")
@@ -29,12 +34,12 @@ public class Main {
             }
         });
 
-        XMPPConnection connection = new XMPPConnection(args[0]);
+        XMPPConnection connection = new XMPPConnection(args[ARG_HOSTNAME]);
         connection.connect();
-        connection.login(args[1], args[2], "Auction");
+        connection.login(args[ARG_USERNAME], args[ARG_PASSWORD], "Auction");
 
         Chat chat = connection.getChatManager().createChat(
-                "auction-" + args[3] + "@" + connection.getServiceName() + "/Auction",
+                "auction-" + args[ARG_ITEM_ID] + "@" + connection.getServiceName() + "/Auction",
                 new MessageListener() {
                     public void processMessage(Chat aChat, Message message) {
                         SwingUtilities.invokeLater(new Runnable() {
