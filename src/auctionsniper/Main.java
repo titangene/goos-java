@@ -4,6 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.packet.Message;
+
 public class Main {
     private static JLabel sniperStatus;
 
@@ -20,5 +24,14 @@ public class Main {
                 frame.setVisible(true);
             }
         });
+
+        XMPPConnection connection = new XMPPConnection(args[0]);
+        connection.connect();
+        connection.login(args[1], args[2], "Auction");
+
+        Chat chat = connection.getChatManager().createChat(
+                "auction-" + args[3] + "@" + connection.getServiceName() + "/Auction",
+                null);
+        chat.sendMessage(new Message());
     }
 }
