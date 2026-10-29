@@ -21,20 +21,23 @@ public class Main {
     public static final String AUCTION_ID_FORMAT =
             ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
 
-    private static JLabel sniperStatus;
+    private JLabel sniperStatus;
 
     @SuppressWarnings("unused")
-    private static Chat notToBeGCd;
+    private Chat notToBeGCd;
+
+    public Main() throws Exception {
+        startUserInterface();
+    }
 
     public static void main(String... args) throws Exception {
-        startUserInterface();
-
-        joinAuction(
+        Main main = new Main();
+        main.joinAuction(
                 connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]),
                 args[ARG_ITEM_ID]);
     }
 
-    private static void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+    private void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
         final Chat chat = connection.getChatManager().createChat(
                 auctionId(itemId, connection),
                 new MessageListener() {
@@ -46,7 +49,7 @@ public class Main {
                         });
                     }
                 });
-        notToBeGCd = chat;
+        this.notToBeGCd = chat;
         chat.sendMessage(new Message());
     }
 
@@ -64,7 +67,7 @@ public class Main {
                 connection.getServiceName());
     }
 
-    private static void startUserInterface() throws Exception {
+    private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 sniperStatus = new JLabel("Joining");
