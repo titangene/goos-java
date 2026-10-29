@@ -29,11 +29,14 @@ public class Main {
     public static void main(String... args) throws Exception {
         startUserInterface();
 
-        XMPPConnection connection =
-                connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
+        joinAuction(
+                connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]),
+                args[ARG_ITEM_ID]);
+    }
 
-        Chat chat = connection.getChatManager().createChat(
-                auctionId(args[ARG_ITEM_ID], connection),
+    private static void joinAuction(XMPPConnection connection, String itemId) throws XMPPException {
+        final Chat chat = connection.getChatManager().createChat(
+                auctionId(itemId, connection),
                 new MessageListener() {
                     public void processMessage(Chat aChat, Message message) {
                         SwingUtilities.invokeLater(new Runnable() {
