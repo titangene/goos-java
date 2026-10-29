@@ -20,7 +20,7 @@ public class FakeAuctionServer {
     public static final String AUCTION_RESOURCE = "Auction";
     private static final String AUCTION_PASSWORD = "auction";
 
-    private final ArrayBlockingQueue<Message> messages = new ArrayBlockingQueue<Message>(1);
+    private final SingleMessageListener messageListener = new SingleMessageListener();
     private final String itemId;
     private final XMPPConnection connection;
     private Chat currentChat;
@@ -41,11 +41,7 @@ public class FakeAuctionServer {
                 new ChatManagerListener() {
                     public void chatCreated(Chat chat, boolean createdLocally) {
                         currentChat = chat;
-                        chat.addMessageListener(new MessageListener() {
-                            public void processMessage(Chat chat, Message message) {
-                                messages.add(message);
-                            }
-                        });
+                        chat.addMessageListener(messageListener);
                     }
                 });
     }
@@ -55,7 +51,7 @@ public class FakeAuctionServer {
     }
 
     public void hasReceivedJoinRequestFromSniper() throws InterruptedException {
-        assertThat("Message", messages.poll(5, TimeUnit.SECONDS), is(notNullValue()));
+        messageListener.receivesAMessage();
     }
 
     public void announceClosed() throws XMPPException {
@@ -64,5 +60,18 @@ public class FakeAuctionServer {
 
     public void stop() {
         connection.disconnect();
+    }
+
+    public class SingleMessageListener implements MessageListener {
+        private final ArrayBlockingQueue<Message> messages =
+                new ArrayBlockingQueue<Message>(1);
+
+        public void processMessage(Chat chat, Message message) {
+            messages.add(message);
+        }
+
+        public void receivesAMessage() throws InterruptedException {
+            assertThat("Message", messages.poll(5, TimeUnit.SECONDS), is(notNullValue()));
+        }
     }
 }
