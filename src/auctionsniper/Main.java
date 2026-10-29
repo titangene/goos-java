@@ -44,8 +44,7 @@ public class Main {
                 connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
 
         Chat chat = connection.getChatManager().createChat(
-                String.format(AUCTION_ID_FORMAT, args[ARG_ITEM_ID],
-                        connection.getServiceName()),
+                auctionId(args[ARG_ITEM_ID], connection),
                 new MessageListener() {
                     public void processMessage(Chat aChat, Message message) {
                         SwingUtilities.invokeLater(new Runnable() {
@@ -66,5 +65,10 @@ public class Main {
         connection.connect();
         connection.login(username, password, AUCTION_RESOURCE);
         return connection;
+    }
+
+    private static String auctionId(String itemId, XMPPConnection connection) {
+        return String.format(AUCTION_ID_FORMAT, itemId,
+                connection.getServiceName());
     }
 }
