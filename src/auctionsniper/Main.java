@@ -16,6 +16,11 @@ public class Main {
     private static final int ARG_PASSWORD = 2;
     private static final int ARG_ITEM_ID = 3;
 
+    public static final String AUCTION_RESOURCE = "Auction";
+    public static final String ITEM_ID_AS_LOGIN = "auction-%s";
+    public static final String AUCTION_ID_FORMAT =
+            ITEM_ID_AS_LOGIN + "@%s/" + AUCTION_RESOURCE;
+
     private static JLabel sniperStatus;
 
     @SuppressWarnings("unused")
@@ -39,7 +44,8 @@ public class Main {
                 connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
 
         Chat chat = connection.getChatManager().createChat(
-                "auction-" + args[ARG_ITEM_ID] + "@" + connection.getServiceName() + "/Auction",
+                String.format(AUCTION_ID_FORMAT, args[ARG_ITEM_ID],
+                        connection.getServiceName()),
                 new MessageListener() {
                     public void processMessage(Chat aChat, Message message) {
                         SwingUtilities.invokeLater(new Runnable() {
@@ -58,7 +64,7 @@ public class Main {
             throws XMPPException {
         XMPPConnection connection = new XMPPConnection(hostname);
         connection.connect();
-        connection.login(username, password, "Auction");
+        connection.login(username, password, AUCTION_RESOURCE);
         return connection;
     }
 }
