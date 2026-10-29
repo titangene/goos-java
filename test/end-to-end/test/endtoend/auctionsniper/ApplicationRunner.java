@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static test.endtoend.auctionsniper.FakeAuctionServer.XMPP_HOSTNAME;
 
 import auctionsniper.Main;
+import auctionsniper.ui.MainWindow;
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
 import com.objogate.wl.swing.driver.JLabelDriver;
@@ -34,16 +35,16 @@ public class ApplicationRunner {
         driver = new JFrameDriver(
                 new GesturePerformer(),
                 JFrameDriver.topLevelFrame(
-                        named("Auction Sniper Main"),
+                        named(MainWindow.MAIN_WINDOW_NAME),
                         showingOnScreen()
                 ),
                 new AWTEventQueueProber(1000, 100)
         );
-        showsSniperStatus("Joining");
+        showsSniperStatus(MainWindow.STATUS_JOINING);
     }
 
     public void showsSniperHasLostAuction() {
-        showsSniperStatus("Lost");
+        showsSniperStatus(MainWindow.STATUS_LOST);
     }
 
     public void stop() {
@@ -54,7 +55,7 @@ public class ApplicationRunner {
 
     @SuppressWarnings("unchecked")
     private void showsSniperStatus(String statusText) {
-        new JLabelDriver(driver, named("sniper status"))
+        new JLabelDriver(driver, named(MainWindow.SNIPER_STATUS_NAME))
                 .hasText(equalTo(statusText));
     }
 }
