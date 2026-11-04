@@ -6,9 +6,10 @@ Java 的編譯、執行、測試一律透過 `docker-compose.yml` 定義的 `too
 
 | 腳本 | 用途 |
 |---|---|
-| `scripts/test.sh` | 依序執行 `test-unit-tests.sh` 與 `test-e2e-tests.sh`（`test.sh --headed` 會轉給 `test-e2e-tests.sh`） |
-| `scripts/test-unit-tests.sh` | 編譯並執行 unit 測試（不用 XMPP server，也沒有 Swing UI，不需要 `xvfb-run`） |
-| `scripts/test-e2e-tests.sh` | 編譯並執行 end-to-end 測試（`test-e2e-tests.sh --headed` 會讓測試執行時的 Swing UI 顯示在主機螢幕上，方便除錯；預設不加參數是用 `xvfb-run` 虛擬 display，畫面不會顯示出來） |
+| `scripts/test.sh` | 編譯一次 app，再依序執行單元測試與 E2E 測試 |
+| `scripts/test.sh unit` | 編譯 app 並執行單元測試（不用 XMPP server，也沒有 Swing UI，不需要 `xvfb-run`） |
+| `scripts/test.sh e2e` | 編譯 app 並執行 E2E 測試（預設用 `xvfb-run` 虛擬 display，畫面不會顯示出來） |
+| `scripts/test.sh [e2e] --headed` | 讓 E2E 測試執行時的 Swing UI 顯示在主機螢幕上，方便除錯 |
 | `scripts/run-app.sh <itemId> [username] [password]` | 編譯並執行 Auction Sniper 這個 Swing app，視窗顯示在主機的 X display 上 |
 | `scripts/fake-auction.sh <itemId>` | 編譯並執行 `tools/FakeAuction.java`，用假拍賣工具手動扮演賣家，驅動 `run-app.sh` 開起來的 app（用法見 [fake-auction.md](fake-auction.md)） |
 
@@ -33,7 +34,7 @@ Openfire 第一次啟動要跑過 setup wizard、建立測試帳號才能用，�
 3. 跑 `scripts/setup-openfire.js` 建立帳號，並把 resource conflict policy 設成 `Never kick`（同一組帳號 + resource 重複登入時拒絕新的登入，回 `conflict(409)`，對應 GOOS ch12 的情境；Openfire 預設是 `Always kick`）
 4. 啟動 toolbox（image 不存在時會先 build）
 
-wizard 失敗或被中斷（例如按 Ctrl-C）時會清掉 Openfire 資料，下次跑腳本時會重跑 wizard。
+`toolbox` 會等 `openfire` 的 healthcheck 通過（port 5222 有回應）才啟動。wizard 失敗或被中斷（例如按 Ctrl-C）時會清掉 Openfire 資料，下次跑腳本時會重跑 wizard。
 
 Openfire 的 host port 由 Docker 分配，要開 admin console 時用這個指令查：
 
