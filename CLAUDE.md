@@ -16,7 +16,7 @@
 
 ## Openfire（XMPP）
 
-E2E 測試需要連到真的 XMPP server，`toolbox` 用 `network_mode: service:openfire` 連到 Docker 跑的 Openfire（`XMPP_HOSTNAME` 寫死 `"localhost"`）。不用先準備環境，第一次跑腳本時會自動跑 setup wizard 建立測試帳號。完整流程見 [docs/docker.md](docs/docker.md)。
+E2E 測試需要連到真的 XMPP server，`toolbox` 用 `network_mode: service:openfire` 連到 Docker 跑的 Openfire（`XMPP_HOSTNAME` 寫死 `"localhost"`）。不用先準備環境，第一次跑腳本時會自動跑 setup wizard 建立測試帳號。完整流程見 [README.md](README.md#使用方式)。
 
 ## 依賴套件：vendor jar
 
