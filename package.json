@@ -1,7 +1,7 @@
 {
   "name": "goos-java",
   "version": "1.0.0",
-  "main": "setup-openfire.js",
+  "main": "scripts/setup-openfire.js",
   "dependencies": {
     "playwright": "^1.62.1"
   }

@@ -1,0 +1,47 @@
+services:
+  openfire:
+    image: ghcr.io/igniterealtime/openfire:latest
+    hostname: localhost
+    # Openfire 預設把內嵌資料庫（含帳號）放在 /usr/local/openfire/embedded-db，
+    # 不在 volume 裡，container 一重建就會遺失。這裡讓它指向 volume 裡的目錄
+    # （由 image 的 entrypoint 建立並設定權限）。
+    entrypoint:
+      - bash
+      - -c
+      - ln -sfn /var/lib/openfire/embedded-db /usr/local/openfire/embedded-db && exec /sbin/entrypoint.sh
+    # 測試與 app 都是連 5222，等它有回應才算 healthy，toolbox 才會啟動
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/5222"]
+      interval: 30s
+      start_period: 120s
+      start_interval: 1s
+    # 不指定 host port，由 Docker 分配，避免多個 Compose 專案搶同一個 port。
+    # toolbox 共用 openfire 的 network namespace，不受影響，仍用原本的 port。
+    # 要從 host 連線時，用 docker compose ps 查實際分配到的 port。
+    ports:
+      - "9090"   # admin console（跑 setup wizard 用）
+      - "5222"   # 測試會用到的 XMPP client port
+      - "7070"   # unencrypted BOSH / WebSocket（ws://.../ws/）
+      - "7443"   # encrypted BOSH / WebSocket（wss://.../ws/）
+    volumes:
+      - openfire-data:/var/lib/openfire
+
+  toolbox:
+    build:
+      context: .
+      dockerfile: toolbox.Dockerfile
+    network_mode: "service:openfire"
+    depends_on:
+      openfire:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw   # 讓容器內的 Swing app 顯示在主機的 X display
+    working_dir: /app
+    # 用 docker-init（tini）當 PID 1 回收孤兒 process；否則 PID 1 是 sleep，
+    # xvfb-run 結束時 kill 掉但沒 wait 的 Xvfb 會一直留成 zombie
+    init: true
+    command: ["sleep", "infinity"]
+
+volumes:
+  openfire-data:

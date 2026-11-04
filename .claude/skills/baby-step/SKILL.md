@@ -35,7 +35,7 @@ description: 依照 ../goos-java 專案 docs/tdd-baby-steps/*.md（00-infra.md�
 
 - 依本專案現況調整過的指令，跑之前先寫出你實際要跑的版本
 - 把指令與完整輸出（不要自己改寫或省略關鍵訊息）列給使用者看
-- 會清掉資料或 container 的指令（例如 `stop-env.sh`、`reset-env.sh`、`docker volume rm`）先問過使用者再跑
+- 會清掉資料或 container 的指令（例如 `scripts/env.sh stop`、`scripts/env.sh reset`、`docker volume rm`）先問過使用者再跑
 - 需要主機螢幕的指令（例如 `test.sh --headed`）請使用者自己跑，並把輸出貼回來
 
 **在拿到實際輸出之前，不要宣稱這個 step 是綠燈**，也不要在 commit message 裡編造 verified output。如果實際現象跟預期不符（例如指令卡住、輸出為空、跟預期訊息不一樣），不要用訓練資料裡的一般知識猜原因並當結論寫下來，自己跑可以實際驗證的診斷指令（例如 `command -v xxx`、加 `timeout`、把錯誤導到 `/dev/stderr`），看到真正的證據再下結論。

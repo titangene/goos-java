@@ -1,9 +1,9 @@
 # 手動模擬 Sniper 加入拍賣、拍賣結束
 
-`docker/tools/FakeAuction.java` 是一個互動式的假拍賣工具，透過 `docker/scripts/fake-auction.sh` 執行（環境設定見 [docker/README.md](../docker/README.md)）：
+`tools/FakeAuction.java` 是一個互動式的假拍賣工具，透過 `scripts/run-fake-auction.sh` 執行（環境設定見 [README.md](../README.md#使用方式)）：
 
 - 它用跟測試程式碼 `FakeAuctionServer.java` 相同的協定（`SOLVersion: 1.1; Event: PRICE; ...`），登入 `auction-<itemId>@localhost/Auction`
-- 它扮演賣家，跟 `docker/scripts/run-app.sh` 開起來的 Auction Sniper app 手動互動
+- 它扮演賣家，跟 `scripts/run-app.sh` 開起來的 Auction Sniper app 手動互動
 
 輸入格式是 SOL 訊息本身的內容，只省略固定不變的 `SOLVersion: 1.1; ` 前綴（工具會自動補上）。例如輸入 `Event: CLOSE;`，實際發出的就是 `SOLVersion: 1.1; Event: CLOSE;`
 
@@ -23,16 +23,14 @@
 
 ## 注意：不要同時跑 e2e 測試
 
-Openfire 的 resource conflict policy 設成 `Never kick`（見 [docker/README.md](../docker/README.md)）。假拍賣工具還連著 `auction-item-54321@localhost/Auction` 時跑 e2e 測試，`FakeAuctionServer.startSellingItem()` 用同一個帳號 + resource 登入會收到 `conflict(409)`，測試失敗。跑測試前先在假拍賣工具輸入 `quit`。
+Openfire 的 resource conflict policy 設成 `Never kick`（見 [README.md](../README.md#使用方式)）。假拍賣工具還連著 `auction-item-54321@localhost/Auction` 時跑 e2e 測試，`FakeAuctionServer.startSellingItem()` 用同一個帳號 + resource 登入會收到 `conflict(409)`，測試失敗。跑測試前先在假拍賣工具輸入 `quit`。
 
 ## 步驟
 
-**1. 準備好 Docker 環境**（第一次要先跑 `docker/scripts/start-env.sh`，見 [docker/README.md](../docker/README.md)）
-
-**2. 開一個新的終端機分頁，啟動假拍賣工具（扮演 `item-54321` 的賣家）：**
+**1. 開一個新的終端機分頁，啟動假拍賣工具（扮演 `item-54321` 的賣家）：**
 
 ```bash
-docker/scripts/fake-auction.sh item-54321
+scripts/run-fake-auction.sh item-54321
 ```
 
 會印出：
@@ -46,15 +44,15 @@ Type a SOL message body (without the "SOLVersion: 1.1; " prefix) to send it, e.g
 Type "quit" to disconnect and exit.
 ```
 
-**3. 另開一個終端機分頁，啟動 app 並加入同一個 item：**
+**2. 另開一個終端機分頁，啟動 app 並加入同一個 item：**
 
 ```bash
-docker/scripts/run-app.sh item-54321
+scripts/run-app.sh item-54321
 ```
 
 app 視窗會顯示 `Joining`。假拍賣工具會在終端機印出 `> Sniper joined: sniper@localhost/Auction`，代表 sniper 已經送出 JOIN 訊息
 
-**4. 模擬拍賣結束**，在 `fake-auction.sh` 的終端機輸入：
+**3. 模擬拍賣結束**，在 `run-fake-auction.sh` 的終端機輸入：
 
 ```
 Event: CLOSE;
@@ -62,13 +60,13 @@ Event: CLOSE;
 
 app 視窗會變成顯示 `Lost`，終端機會印出 `> sent: SOLVersion: 1.1; Event: CLOSE;`
 
-**5. 結束假拍賣工具：**
+**4. 結束假拍賣工具：**
 
 ```
 quit
 ```
 
-以下是跑過 `docker/scripts/fake-auction.sh` 以上流程的 console：
+以下是跑過 `scripts/run-fake-auction.sh` 以上流程的 console：
 
 ```
 Selling item item-54321 as auction-item-54321@localhost/Auction. Waiting for a sniper to join...

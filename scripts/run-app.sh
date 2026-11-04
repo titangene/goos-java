@@ -8,8 +8,8 @@
 # 那組 sniper/sniper 測試帳號。
 #
 # Usage:
-#   docker/scripts/run-app.sh <itemId> [username] [password]
-#   e.g. docker/scripts/run-app.sh item-54321
+#   scripts/run-app.sh <itemId> [username] [password]
+#   e.g. scripts/run-app.sh item-54321
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
@@ -25,7 +25,7 @@ SNIPER_PASSWORD=${3:-sniper}
 
 xhost +local:docker > /dev/null 2>&1 || true
 
-docker compose up -d --build --no-deps toolbox
+scripts/env.sh up
 docker compose exec \
   -e DISPLAY="$DISPLAY" \
   -e ITEM_ID="$ITEM_ID" \

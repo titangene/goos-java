@@ -1,17 +1,30 @@
 # goos-java
 
-參考 [GOOS（Growing Object-Oriented Software, Guided by Tests）](https://www.growing-object-oriented-software.com/) 書中的 Auction Sniper 範例，重新用 TDD 刻一次，盡量比照作者原始的 [goos-code](https://github.com/sf105/goos-code) repo 的簡單管理方式（vendor jar + 手動 `javac`/`java`，不用額外的建置工具）。專案介紹見 [README.md](README.md)。
+用 TDD 重刻 GOOS 書中的 Auction Sniper 範例。專案介紹與使用方式見 [README.md](README.md)。
 
-## Java 一律用 Docker 執行
+## 執行 Java
 
-本專案的 Java（編譯、執行、測試）一律透過 `docker/docker-compose.yml` 定義的 `toolbox` container 執行，不在 host 直接跑 `javac`/`java`。
+Java 的編譯、執行、測試一律透過腳本在 `toolbox` container 內執行，不在 host 直接跑 `javac`/`java`：
 
-- 跑全部測試：`docker/scripts/test.sh`
-- 跑 end-to-end 測試：`docker/scripts/test-e2e-tests.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-e2e-tests.sh`）
+- 全部測試：`scripts/test.sh`
+- unit 測試：`scripts/test.sh unit`
+- E2E 測試：`scripts/test.sh e2e`
+- E2E 測試並在螢幕上顯示 Swing UI（除錯用）：`scripts/test.sh e2e --headed`
+- Swing app：`scripts/run-app.sh <itemId> [username] [password]`
 
-## 依賴套件：vendor jar
+## Openfire（XMPP）
 
-依賴的 jar 放在 `lib/`，不用 Maven/Gradle 等建置工具管理版本，直接 commit 進 git。新增依賴時：runtime 需要的放 `lib/deploy`，只有開發/測試用的放 `lib/develop`（新 jar 丟進去，兩個 IDE 都會自動抓到，不用改設定檔）。編譯 app 只用 `lib/deploy`；編譯/跑測試是 `lib/deploy` + `lib/develop`（`-src.jar` 要排除）。完整說明見 [README.md](README.md)。
+E2E 測試和 app 都連到 Openfire，`XMPP_HOSTNAME` 寫死 `"localhost"`：
+
+- 不用先準備環境，第一次跑腳本時會自動跑 setup wizard 建立測試帳號
+- 環境管理見 [README.md](README.md#3-管理環境)
+
+## 依賴套件
+
+依賴的 jar 直接 commit 進 `lib/`，不用 Maven/Gradle：
+
+- runtime 需要的放 `lib/deploy`
+- 只有開發、測試用的放 `lib/develop`
 
 ## TDD commit message 格式
 
