@@ -24,35 +24,44 @@ Openfire 第一次啟動要跑過 setup wizard、建立測試帳號才能用，�
 | `auction-item-54321` | `auction` |
 | `auction-item-65432` | `auction` |
 
-### 第一次建立環境（或 Openfire 資料被清空後）
+### 第一次建立環境
+
+不用手動建立。還沒有 Openfire 資料時，第一次跑任何測試或 app 腳本會自動依序：
+
+1. 安裝 Playwright（在專案根目錄執行 `npm install`、`npx playwright install chromium`）
+2. 啟動 openfire 並等 admin console 有回應
+3. 跑 `scripts/setup-openfire.js` 建立帳號，並把 resource conflict policy 設成 `Never kick`（同一組帳號 + resource 重複登入時拒絕新的登入，回 `conflict(409)`，對應 GOOS ch12 的情境；Openfire 預設是 `Always kick`）
+4. 啟動 toolbox（image 不存在時會先 build）
+
+wizard 失敗或被中斷（例如按 Ctrl-C）時會清掉 Openfire 資料，下次跑腳本時會重跑 wizard。
+
+Openfire 的 host port 由 Docker 分配，要開 admin console 時用這個指令查：
 
 ```bash
-scripts/start-env.sh
+docker compose port openfire 9090
 ```
 
-會依序：
-1. 啟動 openfire，等 9090 有回應
-2. build/啟動 toolbox
-3. 安裝 Playwright（在專案根目錄執行 `npm install`）
-4. 跑 `setup-openfire.js` 建立帳號，並把 resource conflict policy 設成 `Never kick`（同一組帳號 + resource 重複登入時拒絕新的登入，回 `conflict(409)`，對應 GOOS ch12 的情境；Openfire 預設是 `Always kick`）
-
-之後就能直接跑 `scripts/test.sh`。
-
-### 停止環境
+### 改了 toolbox.Dockerfile
 
 ```bash
-scripts/stop-env.sh
+scripts/env.sh start
 ```
 
-停止並移除 container（openfire + toolbox），並清空 Openfire 的資料 volume。
+### 移除環境
+
+```bash
+scripts/env.sh stop
+```
+
+移除 container（openfire + toolbox）、toolbox image 與 Openfire 資料 volume。
 
 ### 環境設定壞掉、想砍掉重建
 
 ```bash
-scripts/reset-env.sh
+scripts/env.sh reset
 ```
 
-等於 `stop-env.sh` 接 `start-env.sh`，會清空 Openfire 資料重新跑一次 wizard。
+等於 `scripts/env.sh stop` 再跑 `scripts/env.sh start`，會重新 build toolbox 並重新跑一次 wizard。
 
 ## 假拍賣工具
 
