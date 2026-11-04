@@ -10,7 +10,7 @@ Java 的編譯、執行、測試一律透過 `docker-compose.yml` 定義的 `too
 | `scripts/test-unit-tests.sh` | 編譯並執行 unit 測試（不用 XMPP server，也沒有 Swing UI，不需要 `xvfb-run`） |
 | `scripts/test-e2e-tests.sh` | 編譯並執行 end-to-end 測試（`test-e2e-tests.sh --headed` 會讓測試執行時的 Swing UI 顯示在主機螢幕上，方便除錯；預設不加參數是用 `xvfb-run` 虛擬 display，畫面不會顯示出來） |
 | `scripts/run-app.sh <itemId> [username] [password]` | 編譯並執行 Auction Sniper 這個 Swing app，視窗顯示在主機的 X display 上 |
-| `scripts/fake-auction.sh <itemId>` | 編譯並執行 `tools/FakeAuction.java`，用假拍賣工具手動扮演賣家，驅動 `run-app.sh` 開起來的 app（用法見 [docs/fake-auction.md](../docs/fake-auction.md)） |
+| `scripts/fake-auction.sh <itemId>` | 編譯並執行 `tools/FakeAuction.java`，用假拍賣工具手動扮演賣家，驅動 `run-app.sh` 開起來的 app（用法見 [fake-auction.md](fake-auction.md)） |
 
 ## Openfire（XMPP）
 
@@ -27,21 +27,21 @@ Openfire 第一次啟動要跑過 setup wizard、建立測試帳號才能用，�
 ### 第一次建立環境（或 Openfire 資料被清空後）
 
 ```bash
-docker/scripts/start-env.sh
+scripts/start-env.sh
 ```
 
 會依序：
 1. 啟動 openfire，等 9090 有回應
 2. build/啟動 toolbox
-3. 安裝 Playwright（在 `docker/` 目錄執行 `npm install`）
+3. 安裝 Playwright（在專案根目錄執行 `npm install`）
 4. 跑 `setup-openfire.js` 建立帳號，並把 resource conflict policy 設成 `Never kick`（同一組帳號 + resource 重複登入時拒絕新的登入，回 `conflict(409)`，對應 GOOS ch12 的情境；Openfire 預設是 `Always kick`）
 
-之後就能直接跑 `docker/scripts/test.sh`。
+之後就能直接跑 `scripts/test.sh`。
 
 ### 停止環境
 
 ```bash
-docker/scripts/stop-env.sh
+scripts/stop-env.sh
 ```
 
 停止並移除 container（openfire + toolbox），並清空 Openfire 的資料 volume。
@@ -49,11 +49,11 @@ docker/scripts/stop-env.sh
 ### 環境設定壞掉、想砍掉重建
 
 ```bash
-docker/scripts/reset-env.sh
+scripts/reset-env.sh
 ```
 
 等於 `stop-env.sh` 接 `start-env.sh`，會清空 Openfire 資料重新跑一次 wizard。
 
 ## 假拍賣工具
 
-用 `docker/tools/FakeAuction.java`（`scripts/fake-auction.sh`）這個假拍賣工具手動扮演賣家、驅動 `run-app.sh` 開起來的 app，完整操作步驟見 [docs/fake-auction.md](../docs/fake-auction.md)。
+用 `tools/FakeAuction.java`（`scripts/fake-auction.sh`）這個假拍賣工具手動扮演賣家、驅動 `run-app.sh` 開起來的 app，完整操作步驟見 [fake-auction.md](fake-auction.md)。

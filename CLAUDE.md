@@ -4,23 +4,23 @@
 
 ## Java 一律用 Docker 執行
 
-本專案的 Java（編譯、執行、測試）一律透過 `docker/docker-compose.yml` 定義的 `toolbox` container 執行，不在 host 直接跑 `javac`/`java`。
+本專案的 Java（編譯、執行、測試）一律透過 `docker-compose.yml` 定義的 `toolbox` container 執行，不在 host 直接跑 `javac`/`java`。
 
-跑全部測試（先 unit 再 end-to-end）：`docker/scripts/test.sh`。
+跑全部測試（先 unit 再 end-to-end）：`scripts/test.sh`。
 
-跑 unit 測試：`docker/scripts/test-unit-tests.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-unit-tests.sh`；不需要 Openfire，但 `toolbox` 的 `network_mode: service:openfire` 設定仍會連帶啟動 `openfire` container）。
+跑 unit 測試：`scripts/test-unit-tests.sh`（會啟動 `toolbox` container，並在其中執行 `scripts/run-unit-tests.sh`；不需要 Openfire，但 `toolbox` 的 `network_mode: service:openfire` 設定仍會連帶啟動 `openfire` container）。
 
-跑 end-to-end 測試：`docker/scripts/test-e2e-tests.sh`（會啟動 `toolbox` container，並在其中執行 `docker/scripts/run-e2e-tests.sh`）。
+跑 end-to-end 測試：`scripts/test-e2e-tests.sh`（會啟動 `toolbox` container，並在其中執行 `scripts/run-e2e-tests.sh`）。
 
-跑 Swing app（視窗顯示在主機的 X display 上）：`docker/scripts/run-app.sh <itemId> [username] [password]`。
+跑 Swing app（視窗顯示在主機的 X display 上）：`scripts/run-app.sh <itemId> [username] [password]`。
 
 ## Openfire（XMPP）
 
-E2E 測試需要連到真的 XMPP server，`toolbox` 用 `network_mode: service:openfire` 連到 Docker 跑的 Openfire（`XMPP_HOSTNAME` 寫死 `"localhost"`）。第一次建立環境（或 Openfire 資料被清空後）要先跑 `docker/scripts/start-env.sh`，之後才能跑 `docker/scripts/test.sh`。完整流程見 [docker/README.md](docker/README.md)。
+E2E 測試需要連到真的 XMPP server，`toolbox` 用 `network_mode: service:openfire` 連到 Docker 跑的 Openfire（`XMPP_HOSTNAME` 寫死 `"localhost"`）。第一次建立環境（或 Openfire 資料被清空後）要先跑 `scripts/start-env.sh`，之後才能跑 `scripts/test.sh`。完整流程見 [docs/docker.md](docs/docker.md)。
 
 ## 依賴套件：vendor jar
 
-依賴的 jar 放在 `lib/`，不用 Maven/Gradle 管理版本，直接 commit 進 git。新增依賴時：runtime 需要的放 `lib/deploy`，只有開發/測試用的放 `lib/develop`（新 jar 丟進去，兩個 IDE 都會自動抓到，不用改設定檔）。編譯 app 只用 `lib/deploy`；編譯/跑測試是 `lib/deploy` + `lib/develop`（`-src.jar` 要排除，`docker/scripts/run-e2e-tests.sh` 裡已經處理）。完整說明見 [README.md](README.md)。
+依賴的 jar 放在 `lib/`，不用 Maven/Gradle 管理版本，直接 commit 進 git。新增依賴時：runtime 需要的放 `lib/deploy`，只有開發/測試用的放 `lib/develop`（新 jar 丟進去，兩個 IDE 都會自動抓到，不用改設定檔）。編譯 app 只用 `lib/deploy`；編譯/跑測試是 `lib/deploy` + `lib/develop`（`-src.jar` 要排除，`scripts/run-e2e-tests.sh` 裡已經處理）。完整說明見 [README.md](README.md)。
 
 ## TDD commit message 格式
 

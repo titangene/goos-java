@@ -10,16 +10,13 @@ services:
     volumes:
       - openfire-data:/var/lib/openfire
 
-  # 用 network_mode: service:openfire，讓這個 container 裡的 "localhost" 直接
-  # 打到 openfire -- 測試/production code 寫死 XMPP_HOSTNAME = "localhost"，
-  # 這樣就不用改 source code。
   toolbox:
     build:
-      context: ..
-      dockerfile: docker/toolbox.Dockerfile
+      context: .
+      dockerfile: toolbox.Dockerfile
     network_mode: "service:openfire"
     volumes:
-      - ..:/app
+      - .:/app
       - /tmp/.X11-unix:/tmp/.X11-unix:rw   # 讓容器內的 Swing app 顯示在主機的 X display
     working_dir: /app
     # 用 docker-init（tini）當 PID 1 回收孤兒 process；否則 PID 1 是 sleep，

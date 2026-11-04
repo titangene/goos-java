@@ -8,8 +8,8 @@
 # test/end-to-end 那組 sniper/sniper 測試帳號。
 #
 # Usage:
-#   docker/scripts/run-app.sh <itemId> [username] [password]
-#   e.g. docker/scripts/run-app.sh item-54321
+#   scripts/run-app.sh <itemId> [username] [password]
+#   e.g. scripts/run-app.sh item-54321
 set -euo pipefail
 
 cd "$(dirname "$0")/.."

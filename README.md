@@ -11,7 +11,7 @@
 - `lib/deploy`：app 實際執行需要的 runtime 依賴（例如之後接 XMPP 會用到的 smack）
 - `lib/develop`：只有開發/測試會用到的依賴（junit、hamcrest、jmock、windowlicker...），不會進到實際跑起來的 app
 
-編譯 app 只用 `lib/deploy` 的 classpath；編譯/跑測試則是 `lib/deploy` + `lib/develop` 一起用（`lib/develop` 裡的 `-src.jar` 是原始碼、不放進 classpath，`docker/scripts/run-e2e-tests.sh` 裡有排除）。
+編譯 app 只用 `lib/deploy` 的 classpath；編譯/跑測試則是 `lib/deploy` + `lib/develop` 一起用（`lib/develop` 裡的 `-src.jar` 是原始碼、不放進 classpath，`scripts/run-e2e-tests.sh` 裡有排除）。
 
 ## IDE 設定
 
@@ -22,6 +22,6 @@
 
 ## Docker 環境
 
-Java 的編譯/執行/測試都跑在 Docker 裡，Openfire（XMPP）測試環境也是，細節見 [docker/README.md](docker/README.md)。
+Java 的編譯/執行/測試都跑在 Docker 裡，Openfire（XMPP）測試環境也是，細節見 [docs/docker.md](docs/docker.md)。
 
-用 `docker/tools/FakeAuction.java` 這個互動式假拍賣工具模擬賣家，見 [docs/fake-auction.md](docs/fake-auction.md)。
+用 `tools/FakeAuction.java` 這個互動式假拍賣工具模擬賣家，見 [docs/fake-auction.md](docs/fake-auction.md)。
