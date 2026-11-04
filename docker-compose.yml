@@ -2,6 +2,13 @@ services:
   openfire:
     image: ghcr.io/igniterealtime/openfire:latest
     hostname: localhost
+    # Openfire 預設把內嵌資料庫（含帳號）放在 /usr/local/openfire/embedded-db，
+    # 不在 volume 裡，container 一重建就會遺失。這裡讓它指向 volume 裡的目錄
+    # （由 image 的 entrypoint 建立並設定權限）
+    entrypoint:
+      - bash
+      - -c
+      - ln -sfn /var/lib/openfire/embedded-db /usr/local/openfire/embedded-db && exec /sbin/entrypoint.sh
     ports:
       - "9090:9090"   # admin console（跑 setup wizard 用）
       - "5222:5222"   # 測試會用到的 XMPP client port
