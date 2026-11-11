@@ -69,6 +69,8 @@ public class Main {
             showStatus(MainWindow.STATUS_WINNING);
         }
 
+        public void sniperWon() {}
+
         private void showStatus(final String status) {
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
