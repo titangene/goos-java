@@ -13,7 +13,7 @@ import auctionsniper.AuctionEventListener.PriceSource;
 public class AuctionMessageTranslator implements MessageListener {
     private final AuctionEventListener listener;
 
-    public AuctionMessageTranslator(AuctionEventListener listener) {
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
         this.listener = listener;
     }
 
