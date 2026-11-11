@@ -4,6 +4,8 @@ public class AuctionSniper implements AuctionEventListener {
     private final Auction auction;
     private final SniperListener sniperListener;
 
+    private boolean isWinning = false;
+
     public AuctionSniper(Auction auction, SniperListener sniperListener) {
         this.auction = auction;
         this.sniperListener = sniperListener;
@@ -11,19 +13,21 @@ public class AuctionSniper implements AuctionEventListener {
 
     @Override
     public void auctionClosed() {
-        sniperListener.sniperLost();
+        if (isWinning) {
+            sniperListener.sniperWon();
+        } else {
+            sniperListener.sniperLost();
+        }
     }
 
     @Override
     public void currentPrice(int price, int increment, PriceSource priceSource) {
-        switch (priceSource) {
-            case FromSniper:
-                sniperListener.sniperWinning();
-                break;
-            case FromOtherBidder:
-                auction.bid(price + increment);
-                sniperListener.sniperBidding();
-                break;
+        isWinning = priceSource == PriceSource.FromSniper;
+        if (isWinning) {
+            sniperListener.sniperWinning();
+        } else {
+            auction.bid(price + increment);
+            sniperListener.sniperBidding();
         }
     }
 }
