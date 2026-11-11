@@ -49,7 +49,7 @@ public class Main {
         Auction auction = new XMPPAuction(chat);
         chat.addMessageListener(
                 new AuctionMessageTranslator(
-                    null, 
+                    connection.getUser(), 
                     new AuctionSniper(auction, new SniperStateDisplayer())
                 )
         );
